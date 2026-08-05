@@ -26,7 +26,6 @@ class WelcomeToTriboomChatBot(commands.Bot):
         return f"{self.__class__.__name__} is running in channels: {', '.join(self.channel_list)}"
 
     async def say_hi(self) -> None:
-
         the_channel = await self.fetch_channel(self.channel_list[0])
         await the_channel.send( f"Hi Chat!" )
 
