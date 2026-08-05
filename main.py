@@ -10,8 +10,8 @@ from fastapi import FastAPI
 import WelcomeToTriboomChatBot 
 
 load_dotenv
-bot = WelcomeToTriboomChatBot.WelcomeToTriboomChatBot("12", "34")
-#bot2 = WelcomeToTriboomChatBot.WelcomeToTriboomChatBot(getenv('ACCESS_TOKEN'), 'tribooms')
+#bot = WelcomeToTriboomChatBot.WelcomeToTriboomChatBot("12", "34")
+bot = WelcomeToTriboomChatBot.WelcomeToTriboomChatBot(getenv('ACCESS_TOKEN'), 'tribooms', getenv('CLIENT_ID'))
 
 # Helper function to avoid naming conflict with asyncio
 def asyncio_create_task(temp_coroutine):
@@ -27,7 +27,13 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-# 3. Simple FastAPI endpoint
 @app.get("/")
 async def root():
-    return {"status": "FastAPI server is running", "bot_user": bot.nick}
+    status_message = await bot.get_status()
+    return {"status": status_message}
+
+@app.get("/sayhi")
+async def say_hi():
+    await bot.say_hi()
+
+
