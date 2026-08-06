@@ -15,7 +15,7 @@ import WelcomeToTriboomChatBot
 
 load_dotenv
 
-setup_logging(level=logging.INFO)
+setup_logging(level=logging.DEBUG)
 
 logger = logging.getLogger("uvicorn.error")
 bot = WelcomeToTriboomChatBot.WelcomeToTriboomChatBot()
