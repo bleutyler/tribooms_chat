@@ -3,15 +3,22 @@ from dotenv import load_dotenv
 from os import getenv
 
 import asyncio
+import logging
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 #from twitchio.ext import commands
 
+from twitchio.utils import setup_logging
+
 import WelcomeToTriboomChatBot 
 
 load_dotenv
-#bot = WelcomeToTriboomChatBot.WelcomeToTriboomChatBot("12", "34")
-bot = WelcomeToTriboomChatBot.WelcomeToTriboomChatBot(getenv('ACCESS_TOKEN'), 'tribooms', getenv('CLIENT_ID'))
+
+setup_logging(level=logging.INFO)
+
+logger = logging.getLogger("uvicorn.error")
+bot = WelcomeToTriboomChatBot.WelcomeToTriboomChatBot()
 
 # Helper function to avoid naming conflict with asyncio
 def asyncio_create_task(temp_coroutine):
@@ -32,8 +39,10 @@ async def root():
     status_message = await bot.get_status()
     return {"status": status_message}
 
-@app.get("/sayhi")
+@app.get("/say_hi")
 async def say_hi():
+    bot_task = asyncio_create_task(bot.say_hi())
     await bot.say_hi()
+    return {"status": "Said hello to chat" }
 
 
