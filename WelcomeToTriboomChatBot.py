@@ -24,17 +24,17 @@ class WelcomeToTriboomChatBot(commands.Bot):
         self.logger.info(f"{self.__class__.__name__} initialized")
 
     async def event_ready(self):
-        self.logger.info(f'Logged into Twitch !')
+        self.logger.info('Logged into Twitch !')
 
     async def get_status(self) -> str:
         return f"{self.__class__.__name__} is running"
 
     async def say_hi(self) -> None:
         " This is a command to say Hi Chat! from a FastAPI endpoint "
-        self.logger.info(f"Saying Hello")
-        print(f"Saying Hello")
+        self.logger.info("Saying Hello")
+        print("Saying Hello")
         the_channel = await self.fetch_channel("tribooms")
-        await the_channel.send( f"Hi Chat!" )
+        await the_channel.send( "Hi Chat!" )
 
     @commands.command(name='hello')
     async def hello_command(self, ctx):

@@ -52,6 +52,7 @@ async def root():
 
 @app.get("/user_info")
 async def user_info():
+    "Display user information for owners of the Chatbot"
     status_message = ""
     async with TwitchClient(client_id=getenv('CLIENT_ID'), client_secret=getenv('CLIENT_SECRET')) as client:
         await client.login()
