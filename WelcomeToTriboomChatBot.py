@@ -22,7 +22,7 @@ class WelcomeToTriboomChatBot(commands.Bot):
         )
 
         self.logger.info(f"{self.__class__.__name__} initialized")
-            
+
     async def event_ready(self):
         self.logger.info(f'Logged into Twitch !')
 
@@ -39,17 +39,19 @@ class WelcomeToTriboomChatBot(commands.Bot):
     @commands.command(name='hello')
     async def hello_command(self, ctx):
         " Say Hello back to the user "
-        await ctx.send(f"Hello {ctx.author.name} from {self.__class__.__name__}")
+        await ctx.send(f"Hello {ctx.author.name}",
+                       f" from {self.__class__.__name__}")
 
     @commands.command(name="user_info")
     async def user_info(self, ctx):
         " Get simple twitch user details back"
-        with twitchio.Client(client_id=getenv('CLIENT_ID'), client_secret=getenv('CLIENT_SECRET')) as client:
+        with twitchio.Client(client_id=getenv('CLIENT_ID'),
+                             client_secret=getenv('CLIENT_SECRET')) as client:
             await client.login()
             twitch_users = await client.fetch_users(logins=[ctx.author.name])
             for user in twitch_users:
-                self.logger.debug(f"Twitch user '{self.login_name}' fetched. name: {user.name} (ID: {user.id})")
-        
+                self.logger.debug(f"Twitch user '{self.login_name}' fetched.",
+                                   f"name: {user.name} (ID: {user.id})")
 
     @commands.command(name='uh_oh')
     async def uh_oh(self, ctx):
@@ -57,4 +59,3 @@ class WelcomeToTriboomChatBot(commands.Bot):
         import winsound
         winsound.PlaySound("audio/icq-uh-oh.mp3", winsound.SND_FILENAME)
         await ctx.send(f"User {ctx.author.name} used Audio Ping")
-

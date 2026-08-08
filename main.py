@@ -2,7 +2,7 @@
 
 import asyncio
 import logging
-import WelcomeToTriboomChatBot 
+import WelcomeToTriboomChatBot
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -20,7 +20,7 @@ logging.basicConfig(encoding='utf-8', level=logging.DEBUG, filename="project.log
 logger = logging.getLogger(__name__)
 print("logger is made")
 logger.info("Logger initialized beep boop")
-#logger = logging.getLogger("uvicorn.error")            
+#logger = logging.getLogger("uvicorn.error")
 bot = WelcomeToTriboomChatBot.WelcomeToTriboomChatBot()
 
 # Helper function to avoid naming conflict with asyncio
@@ -53,7 +53,6 @@ async def root():
 @app.get("/user_info")
 async def user_info():
     status_message = ""
-    # Only need to run once taken from twitchio docs
     async with TwitchClient(client_id=getenv('CLIENT_ID'), client_secret=getenv('CLIENT_SECRET')) as client:
         await client.login()
         print(f" Twitch client created {client}")
@@ -66,7 +65,6 @@ async def user_info():
             print(user_message)
             status_message += user_message + "\n"
             logger.debug(user_message)
-    
     #bot_task = asyncio_create_task(bot.user_info())
     #await bot.user_info()
     return {"status": status_message}
@@ -79,6 +77,6 @@ async def say_hi():
 
 @app.get("/uh_oh")
 async def uh_oh():
-    bot_task = asyncio_create_task(bot.uh_oh()) 
+    bot_task = asyncio_create_task(bot.uh_oh())
     await bot.uh_oh()
     return {"status": "Audio Pinged played and logged"}
