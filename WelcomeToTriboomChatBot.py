@@ -1,6 +1,4 @@
 
-#from contextlib import asynccontextmanager
-#from fastapi import FastAPI
 from dotenv import load_dotenv
 from flask import ctx
 from os import getenv
@@ -32,6 +30,7 @@ class WelcomeToTriboomChatBot(commands.Bot):
         return f"{self.__class__.__name__} is running"
 
     async def say_hi(self) -> None:
+        " This is a command to say Hi Chat! from a FastAPI endpoint "
         self.logger.info(f"Saying Hello")
         print(f"Saying Hello")
         the_channel = await self.fetch_channel("tribooms")
@@ -39,11 +38,12 @@ class WelcomeToTriboomChatBot(commands.Bot):
 
     @commands.command(name='hello')
     async def hello_command(self, ctx):
+        " Say Hello back to the user "
         await ctx.send(f"Hello {ctx.author.name} from {self.__class__.__name__}")
 
     @commands.command(name="user_info")
     async def user_info(self, ctx):
-        # Only need to run once taken from twitchio docs
+        " Get simple twitch user details back"
         with twitchio.Client(client_id=getenv('CLIENT_ID'), client_secret=getenv('CLIENT_SECRET')) as client:
             await client.login()
             twitch_users = await client.fetch_users(logins=[ctx.author.name])
@@ -53,7 +53,8 @@ class WelcomeToTriboomChatBot(commands.Bot):
 
     @commands.command(name='uh_oh')
     async def uh_oh(self, ctx):
+        "Play the ICQ uh oh sound"
         import winsound
-        winsound.PlaySound("audio/", winsound.SND_FILENAME)
+        winsound.PlaySound("audio/icq-uh-oh.mp3", winsound.SND_FILENAME)
         await ctx.send(f"User {ctx.author.name} used Audio Ping")
 
