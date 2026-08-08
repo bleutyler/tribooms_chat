@@ -1,9 +1,10 @@
-
+""" 
+Use FastAPI to be able to communicate to twitch channel in a threaded manner.
+"""
+from os import getenv
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from os import getenv
-#from twitchio.ext import commands
 from twitchio.utils import setup_logging as setup_twitchio_logging
 from twitchio import Client as TwitchClient
 import asyncio
@@ -21,13 +22,14 @@ logger.info("Logger initialized beep boop")
 #logger = logging.getLogger("uvicorn.error")
 bot = triboom_chat_bot.triboom_chat_bot()
 
-# Helper function to avoid naming conflict with asyncio
 def asyncio_create_task(temp_coroutine):
+    "Helper function to avoid naming conflict with asyncio"
     return asyncio.create_task(temp_coroutine)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    "Setup lifespan for FastAPI"
     print("Going to start bot")
     bot_task = asyncio_create_task(bot.start())
     print("Bot starting")
@@ -53,10 +55,12 @@ async def root():
 async def user_info():
     "Display user information for owners of the Chatbot"
     status_message = ""
-    async with TwitchClient(client_id=getenv('CLIENT_ID'), client_secret=getenv('CLIENT_SECRET')) as client:
+    async with TwitchClient(client_id=getenv('CLIENT_ID'), 
+                            client_secret=getenv('CLIENT_SECRET')) as client:
         await client.login()
         print(f" Twitch client created {client}")
-        twitch_users = await client.fetch_users(logins=["TriboomsChatBot", "onetwofiveeleven", "tribooms"])
+        twitch_users = await client.fetch_users(logins=["TriboomsChatBot", "onetwofiveeleven", 
+                                                        "tribooms"])
         print(f"{len(twitch_users)} Twitch user(s) fetched for 'TriboomsChatBot'")
         logger.debug(f"{len(twitch_users)} Twitch user(s) fetched for 'TriboomsChatBot'")
         status_message = "0 Users found" if len(twitch_users) == 0 else ""

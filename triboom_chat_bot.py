@@ -2,12 +2,13 @@
 This is a simple Twitch Chat Bot for the Tribooms Twitch Channel.
 Emphasis on using FastAPI for threaded processing and async calls to TwitchIO
 """
+import logging
+import winsound
+import twitchio
+from os import getenv
 from dotenv import load_dotenv
 from flask import ctx
-from os import getenv
 from twitchio.ext import commands
-import twitchio
-import logging
 
 class triboom_chat_bot(commands.Bot):
     def __init__(self, new_logger: logging.Logger | None = None) -> None:
@@ -59,6 +60,5 @@ class triboom_chat_bot(commands.Bot):
     @commands.command(name='uh_oh')
     async def uh_oh(self, ctx):
         "Play the ICQ uh oh sound"
-        import winsound
         winsound.PlaySound("audio/icq-uh-oh.mp3", winsound.SND_FILENAME)
         await ctx.send(f"User {ctx.author.name} used Audio Ping")
