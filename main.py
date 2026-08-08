@@ -8,7 +8,7 @@ from twitchio.utils import setup_logging as setup_twitchio_logging
 from twitchio import Client as TwitchClient
 import asyncio
 import logging
-import WelcomeToTriboomChatBot
+import triboom_chat_bot
 
 load_dotenv
 setup_twitchio_logging(level=logging.INFO)
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 print("logger is made")
 logger.info("Logger initialized beep boop")
 #logger = logging.getLogger("uvicorn.error")
-bot = WelcomeToTriboomChatBot.WelcomeToTriboomChatBot()
+bot = triboom_chat_bot.triboom_chat_bot()
 
 # Helper function to avoid naming conflict with asyncio
 def asyncio_create_task(temp_coroutine):
