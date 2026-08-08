@@ -2,9 +2,8 @@
 from dotenv import load_dotenv
 from flask import ctx
 from os import getenv
-import twitchio
 from twitchio.ext import commands
-
+import twitchio
 import logging
 
 class WelcomeToTriboomChatBot(commands.Bot):

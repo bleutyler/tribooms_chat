@@ -1,8 +1,4 @@
 
-
-import asyncio
-import logging
-import WelcomeToTriboomChatBot
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -10,10 +6,12 @@ from os import getenv
 #from twitchio.ext import commands
 from twitchio.utils import setup_logging as setup_twitchio_logging
 from twitchio import Client as TwitchClient
+import asyncio
+import logging
+import WelcomeToTriboomChatBot
 
 load_dotenv
-#setup_twitchio_logging(level=logging.DEBUG)
-
+setup_twitchio_logging(level=logging.INFO)
 
 logging.basicConfig(encoding='utf-8', level=logging.DEBUG, filename="project.log",
                     format="%(asctime)s - %(levelname)s - %(message)s" )
@@ -45,6 +43,7 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 async def root():
+    "Root method for app "
     print(f"bot is made: {bot}")
     status_message = await bot.get_status()
     return {"status": status_message}
@@ -72,12 +71,14 @@ async def user_info():
 
 @app.get("/say_hi")
 async def say_hi():
+    "Write to chat without a command from Twitch"
     bot_task = asyncio_create_task(bot.say_hi())
     await bot.say_hi()
     return {"status": "Said Hi Chat to chat" }
 
 @app.get("/uh_oh")
 async def uh_oh():
+    "Get the bot to play a sound"
     bot_task = asyncio_create_task(bot.uh_oh())
     await bot.uh_oh()
     return {"status": "Audio Pinged played and logged"}
