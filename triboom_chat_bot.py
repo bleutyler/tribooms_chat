@@ -46,13 +46,13 @@ class triboom_chat_bot(commands.Bot):
         await the_channel.send( "Hi Chat!" )
 
     @commands.command(name='hello')
-    async def hello_command(self, ctx):
+    async def hello_command(self, ctx: commands.Context):
         "Say Hello back to the user"
         await ctx.send(f"Hello {ctx.author.name}",
                        f" from {self.__class__.__name__}")
 
     @commands.command(name="user_info")
-    async def user_info(self, ctx):
+    async def user_info(self, ctx: commands.Context):
         "Get simple twitch user details"
         with twitchio.Client(client_id=getenv('CLIENT_ID'),
                              client_secret=getenv('CLIENT_SECRET')) as client:
@@ -63,7 +63,7 @@ class triboom_chat_bot(commands.Bot):
                                    f"name: {user.name} (ID: {user.id})")
 
     @commands.command(name='uh_oh')
-    async def uh_oh(self, ctx):
+    async def uh_oh(self, ctx: commands.Context):
         "Play the ICQ uh oh sound"
         winsound.PlaySound("audio/icq-uh-oh.mp3", winsound.SND_FILENAME)
         await ctx.send(f"User {ctx.author.name} used Audio Ping")
