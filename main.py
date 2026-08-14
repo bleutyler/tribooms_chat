@@ -6,21 +6,30 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from twitchio.utils import setup_logging as setup_twitchio_logging
-from twitchio import Client as TwitchClient
+from twitchio import Client as TwitchClient, user
 import asyncio
 import logging
 import triboom_chat_bot
+import twitchio
 
 load_dotenv
 setup_twitchio_logging(level=logging.INFO)
 
-logging.basicConfig(encoding='utf-8', level=logging.DEBUG, filename="project.log",
-                    format="%(asctime)s - %(levelname)s - %(message)s" )
+
+### SETUP ####
+output_file = "project.log"
+file_handler = logging.FileHandler(filename=output_file, encoding='utf-8', mode='w')
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+twitchio.utils.setup_logging(level=logging.DEBUG, handler=file_handler)
+
 logger = logging.getLogger(__name__)
-print("logger is made")
-logger.info("Logger initialized beep boop")
+logger.addHandler(file_handler)
+logger.info(f"Logger initialized beep {logger}")
 #logger = logging.getLogger("uvicorn.error")
-bot = triboom_chat_bot.triboom_chat_bot()
+bot = triboom_chat_bot.triboom_chat_bot(logger)
+
+### FastAPI Endpoints ###
 
 def asyncio_create_task(temp_coroutine):
     "Helper function to avoid naming conflict with asyncio"
@@ -30,23 +39,25 @@ def asyncio_create_task(temp_coroutine):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     "Setup lifespan for FastAPI"
-    print("Going to start bot")
+    logger.info("Going to start bot")
     bot_task = asyncio_create_task(bot.start())
-    print("Bot starting")
+    logger.info("Bot starting")
     await bot.start()
-    print("Bot started")
+    logger.info("Bot started")
+    #user = bot.create_partialuser(user_id=getenv('STREAMER_ID'), user_login="OneTwoFiveEleven")
+    #await user.send_message(sender=bot.user, message="Hello World!")
     yield
-    await bot.close()
-    print("Bot Closed")
+    #await bot.close()
+   # logger.info("Bot Closed")
 
-
+logger.info("Starting the FastAPI app")
 app = FastAPI(lifespan=lifespan)
-
+logger.info("FastAPI app Started")
 
 @app.get("/")
 async def root():
-    "Root method for app "
-    print(f"bot is made: {bot}")
+    "Root method for app"
+    logger.info("Root URL called - get bot status")
     status_message = await bot.get_status()
     return {"status": status_message}
 
@@ -55,11 +66,11 @@ async def root():
 async def user_info():
     "Display user information for owners of the Chatbot"
     status_message = ""
-    async with TwitchClient(client_id=getenv('CLIENT_ID'), 
+    async with TwitchClient(client_id=getenv('CLIENT_ID'),
                             client_secret=getenv('CLIENT_SECRET')) as client:
         await client.login()
         print(f" Twitch client created {client}")
-        twitch_users = await client.fetch_users(logins=["TriboomsChatBot", "onetwofiveeleven", 
+        twitch_users = await client.fetch_users(logins=["onetwofiveeleven",
                                                         "tribooms"])
         print(f"{len(twitch_users)} Twitch user(s) fetched for 'TriboomsChatBot'")
         logger.debug(f"{len(twitch_users)} Twitch user(s) fetched for 'TriboomsChatBot'")

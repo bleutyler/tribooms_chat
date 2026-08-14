@@ -10,28 +10,33 @@ from dotenv import load_dotenv
 from flask import ctx
 from twitchio.ext import commands
 
+load_dotenv()
+
 class triboom_chat_bot(commands.Bot):
     def __init__(self, new_logger: logging.Logger | None = None) -> None:
-        self.login_name = "TriboomsChatBot"
+        self.redirect_uri = getenv('CALLBACK_URL')
+        self.streamer_id = int(getenv('STREAMER_ID'))
         self.logger = new_logger or logging.getLogger(__name__)
         super().__init__(
             client_id=getenv('CLIENT_ID'),
             client_secret=getenv('CLIENT_SECRET'),
-            bot_id=1226671483,
-            owner_id="tribooms",
+            bot_id=1234,
+            owner_id=self.streamer_id,
             prefix='!',
-            redirect_uri='https://twitchtokengenerator.com/oauth/callback',
+            redirect_uri=self.redirect_uri,
             channel="tribooms"
         )
 
-        self.logger.info(f"{self.__class__.__name__} initialized")
+        self.login_name = "TriboomsChatBot"      
+        self.logger.info(f"{self.__class__.__name__} initialized boop")
 
     async def event_ready(self):
         "Simple Ready method to make sure bot is alive"
-        self.logger.info('Logged into Twitch !')
+        self.logger.info('Executed Bot event_ready() method')
 
     async def get_status(self) -> str:
         "State the status of the Bot"
+        self.logger.debug(f"{self.__class__.__name__} Status Message Requested")
         return f"{self.__class__.__name__} is running"
 
     async def say_hi(self) -> None:
