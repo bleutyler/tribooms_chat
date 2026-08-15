@@ -1,0 +1,6 @@
+asyncio
+dotenv
+fastapi
+flask
+logging
+twitchio
