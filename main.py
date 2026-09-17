@@ -29,34 +29,42 @@ logger.info(f"Logger initialized beep {logger}")
 #logger = logging.getLogger("uvicorn.error")
 bot = triboom_chat_bot.triboom_chat_bot(logger)
 
-### FastAPI Endpoints ###
-
-def asyncio_create_task(temp_coroutine):
-    "Helper function to avoid naming conflict with asyncio"
-    return asyncio.create_task(temp_coroutine)
-
-
+##################
+#### LIFESPAN ####
+##################
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     "Setup lifespan for FastAPI"
     logger.info("Going to start bot")
-    bot_task = asyncio_create_task(bot.start())
-    logger.info("Bot starting")
-    await bot.start()
+    bot_start = asyncio.create_task(bot.start())
+    logger.info("Waiting 1 sec")
+    await asyncio.sleep(1)
     logger.info("Bot started")
-    #user = bot.create_partialuser(user_id=getenv('STREAMER_ID'), user_login="OneTwoFiveEleven")
-    #await user.send_message(sender=bot.user, message="Hello World!")
+
+    user = bot.create_partialuser(user_id=getenv('STREAMER_ID'), user_login="OneTwoFiveEleven")    
+    #bot_say_hello = asyncio.create_task((user.send_message(sender=bot.user, message="Hello World!"))
+    #await bot_say_hello
+    #logger.info("Sent Hello World")
+    logger.info("About to Yield to lifespan")
     yield
-    #await bot.close()
-   # logger.info("Bot Closed")
+
+##############
+#### MAIN ####
+##############
 
 logger.info("Starting the FastAPI app")
 app = FastAPI(lifespan=lifespan)
 logger.info("FastAPI app Started")
 
+
+#########################
+### FastAPI Endpoints ###
+#########################
+
 @app.get("/")
 async def root():
     "Root method for app"
+    #return {"status": "Simple FastAPI"}
     logger.info("Root URL called - get bot status")
     status_message = await bot.get_status()
     return {"status": status_message}
@@ -80,20 +88,20 @@ async def user_info():
             print(user_message)
             status_message += user_message + "\n"
             logger.debug(user_message)
-    #bot_task = asyncio_create_task(bot.user_info())
+    #bot_task = asyncio.create_task((bot.user_info())
     #await bot.user_info()
     return {"status": status_message}
 
 @app.get("/say_hi")
 async def say_hi():
-    "Write to chat without a command from Twitch"
-    bot_task = asyncio_create_task(bot.say_hi())
-    await bot.say_hi()
-    return {"status": "Said Hi Chat to chat" }
+    "Write to chat"
+    bot_task = asyncio.create_task(bot.say_hi())
+    await asyncio.sleep(1)
 
-@app.get("/uh_oh")
+    return {"status": bot_task.get_name() + " -=-=- " + bot_task.get_result() }
+
+@app.get("/uh_oh",summary="Play an uh oh sound")
 async def uh_oh():
     "Get the bot to play a sound"
-    bot_task = asyncio_create_task(bot.uh_oh())
-    await bot.uh_oh()
+    await asyncio.create_task(bot.uh_oh())
     return {"status": "Audio Pinged played and logged"}

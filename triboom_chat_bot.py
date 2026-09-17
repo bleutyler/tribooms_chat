@@ -2,6 +2,7 @@
 This is a simple Twitch Chat Bot for the Tribooms Twitch Channel.
 Emphasis on using FastAPI for threaded processing and async calls to TwitchIO
 """
+import asyncio
 import logging
 import winsound
 import twitchio
@@ -15,7 +16,7 @@ load_dotenv()
 class triboom_chat_bot(commands.Bot):
     def __init__(self, new_logger: logging.Logger | None = None) -> None:
         self.redirect_uri = getenv('CALLBACK_URL')
-        self.streamer_id = int(getenv('STREAMER_ID'))
+        self.streamer_id = getenv('HOST_STREAMER_ID')
         self.logger = new_logger or logging.getLogger(__name__)
         super().__init__(
             client_id=getenv('CLIENT_ID'),
@@ -39,11 +40,20 @@ class triboom_chat_bot(commands.Bot):
         self.logger.debug(f"{self.__class__.__name__} Status Message Requested")
         return f"{self.__class__.__name__} is running"
 
-    async def say_hi(self) -> None:
+    async def say_hi(self) -> str:
         "This is a command to say Hi Chat! from a FastAPI endpoint "
         self.logger.info("Saying Hello")
-        the_channel = await self.fetch_channel("tribooms")
-        await the_channel.send( "Hi Chat!" )
+        channel_task = asyncio.create_task( self.fetch_channel(self.streamer_id) )
+        await asyncio.sleep(1)
+        
+        match channel_task:
+            case None:
+                self.logger.error(f"Channel {self.streamer_id} not found")
+            case _:
+                self.logger.info(f"return is of type {channel_task.__class__.__name__}")
+                the_hi = channel_task.send( "Hi Chat!" )
+
+        
 
     @commands.command(name='hello')
     async def hello_command(self, ctx: commands.Context):
