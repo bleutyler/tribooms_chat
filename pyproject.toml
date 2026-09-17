@@ -1,0 +1,46 @@
+[build-system]
+# Minimum requirements to build the project
+requires = [ "dotenv", "fastapi", "twitchio", "winsound" ]
+#build-backend = ""
+
+[project]
+name = "triboom_chat"
+version = "0.1.0"
+description = "A Simple Python project to welcome users to chat and ping the host"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL" }
+keywords = [ "twitch", "chatbot" ]
+authors = [
+    { name = "Tyler Slijboom", email = "bites.crutch-4k@icloud.com" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GPL License",
+    "Operating System :: Windows",
+]
+
+# Core dependencies needed to run the application
+dependencies = [
+    "dotenv", "fastapi", "twitchio",
+    "winsound"
+]
+
+[project.urls]
+Homepage = "https://github.com/bleutyler/tribooms_chat"
+Documentation = "https://github.com/bleutyler/tribooms_chat#readme"
+Repository = "https://github.com/bleutyler/tribooms_chat.git"
+
+[tool.black]
+# Configuration for the Black code formatter
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
+
+[tool.pytest.ini_options]
+# Configuration for the Pytest testing framework
+minversion = "7.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
