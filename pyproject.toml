@@ -1,0 +1,2 @@
+[tool.pylint.main]
+ignore=get_user_and_id_from_twitch
