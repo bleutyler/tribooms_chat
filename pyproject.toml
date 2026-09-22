@@ -1,3 +1,6 @@
+[tool.pylint."messages control"]
+disable = "all"
+
 [build-system]
 # Minimum requirements to build the project
 requires = [ "dotenv", "fastapi", "twitchio", "winsound" ]
