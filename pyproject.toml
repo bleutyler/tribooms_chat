@@ -9,6 +9,7 @@ keywords = [ "twitch", "chatbot" ]
 authors = [
     { name = "Tyler Slijboom" }
 ]
+disable=[ "no-member", "no-name-in-module" ]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: GPL License",
