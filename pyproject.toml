@@ -1,3 +1,28 @@
-[tool.pylint."messages control"]
-disable = "all"
+[project]
+name = "triboom_chat"
+version = "0.1.0"
+description = "A Simple Python project to play audio when people chat"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL" }
+keywords = [ "twitch", "chatbot" ]
+authors = [
+    { name = "Tyler Slijboom" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GPL License",
+    "Operating System :: Windows",
+]
+ignored-modules = ["requests"]
 
+# Core dependencies needed to run the application
+dependencies = [
+    "dotenv", "fastapi", "twitchio",
+    "winsound"
+]
+
+[project.urls]
+Homepage = "https://github.com/bleutyler/tribooms_chat"
+Documentation = "https://github.com/bleutyler/tribooms_chat#readme"
+Repository = "https://github.com/bleutyler/tribooms_chat.git"
