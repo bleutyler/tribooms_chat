@@ -20,8 +20,7 @@ ignore-files = [ "get_user_and_id_from_twitch.py" ]
 
 # Core dependencies needed to run the application
 dependencies = [
-    "dotenv", "fastapi", "twitchio",
-    "winsound"
+    "dotenv", "fastapi", "twitchio", "winsound"
 ]
 
 [project.urls]
