@@ -14,7 +14,7 @@ classifiers = [
     "License :: OSI Approved :: GPL License",
     "Operating System :: Windows",
 ]
-ignored-modules = ["requests"]
+ignored-modules = [ "requests", "twitchio", "winsound" ]
 ignore-files = [ "get_user_and_id_from_twitch.py" ]
 
 # Core dependencies needed to run the application

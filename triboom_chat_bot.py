@@ -4,16 +4,17 @@ Emphasis on using FastAPI for threaded processing and async calls to TwitchIO
 """
 import asyncio
 import logging
-import winsound
-import twitchio
 from os import getenv
 from dotenv import load_dotenv
 from flask import ctx
 from twitchio.ext import commands
+import twitchio
+import winsound
 
 load_dotenv()
 
 class triboom_chat_bot(commands.Bot):
+    "The Chat bot that will just watch for messages and make a sound"
     def __init__(self, new_logger: logging.Logger | None = None) -> None:
         self.redirect_uri = getenv('CALLBACK_URL')
         self.streamer_id = getenv('HOST_STREAMER_ID')
@@ -28,7 +29,7 @@ class triboom_chat_bot(commands.Bot):
             channel="tribooms"
         )
 
-        self.login_name = "TriboomsChatBot"      
+        self.login_name = "TriboomsChatBot"
         self.logger.info(f"{self.__class__.__name__} initialized boop")
 
     async def event_ready(self):
@@ -45,7 +46,6 @@ class triboom_chat_bot(commands.Bot):
         self.logger.info("Saying Hello")
         channel_task = asyncio.create_task( self.fetch_channel(self.streamer_id) )
         await asyncio.sleep(1)
-        
         match channel_task:
             case None:
                 self.logger.error(f"Channel {self.streamer_id} not found")
@@ -53,27 +53,25 @@ class triboom_chat_bot(commands.Bot):
                 self.logger.info(f"return is of type {channel_task.__class__.__name__}")
                 the_hi = channel_task.send( "Hi Chat!" )
 
-        
-
     @commands.command(name='hello')
-    async def hello_command(self, ctx: commands.Context):
+    async def hello_command(self, context: commands.Context):
         "Say Hello back to the user"
-        await ctx.send(f"Hello {ctx.author.name}",
+        await context.send(f"Hello {context.author.name}",
                        f" from {self.__class__.__name__}")
 
     @commands.command(name="user_info")
-    async def user_info(self, ctx: commands.Context):
+    async def user_info(self, context: commands.Context):
         "Get simple twitch user details"
-        with twitchio.Client(client_id=getenv('CLIENT_ID'),
-                             client_secret=getenv('CLIENT_SECRET')) as client:
-            await client.login()
-            twitch_users = await client.fetch_users(logins=[ctx.author.name])
-            for user in twitch_users:
-                self.logger.debug(f"Twitch user '{self.login_name}' fetched.",
+        client = twitchio.Client(getenv('CLIENT_ID'),
+                             client_secret=getenv('CLIENT_SECRET'))
+        await client.login()
+        twitch_users = await client.fetch_users(logins=[context.author.name])
+        for user in twitch_users:
+            self.logger.debug(f"Twitch user '{self.login_name}' fetched.",
                                    f"name: {user.name} (ID: {user.id})")
 
     @commands.command(name='uh_oh')
-    async def uh_oh(self, ctx: commands.Context):
+    async def uh_oh(self, context: commands.Context):
         "Play the ICQ uh oh sound"
         winsound.PlaySound("audio/icq-uh-oh.mp3", winsound.SND_FILENAME)
-        await ctx.send(f"User {ctx.author.name} used Audio Ping")
+        await context.send(f"User {context.author.name} used Audio Ping")
