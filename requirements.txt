@@ -1,0 +1,7 @@
+asyncio
+dotenv
+fastapi
+flask
+logging
+twitchio
+# winsound #Currently github action does not download this one

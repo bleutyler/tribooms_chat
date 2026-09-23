@@ -9,7 +9,6 @@ keywords = [ "twitch", "chatbot" ]
 authors = [
     { name = "Tyler Slijboom" }
 ]
-disable=[ "no-member", "no-name-in-module" ]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: GPL License",
@@ -27,3 +26,10 @@ dependencies = [
 Homepage = "https://github.com/bleutyler/tribooms_chat"
 Documentation = "https://github.com/bleutyler/tribooms_chat#readme"
 Repository = "https://github.com/bleutyler/tribooms_chat.git"
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "import-error",
+    "no-member",
+    "no-name-in-module",
+]

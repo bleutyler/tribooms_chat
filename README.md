@@ -2,7 +2,7 @@
 
 Purpose:
 
-using <b>FastAPI<b> and the <b>twitchio</b> module for commands that can run on one machine
+using <b>FastAPI</b> and the <b>twitchio</b> module for commands that can run on one machine
 Give a ping command that will play a sound with the !hello command
 
 # Execution

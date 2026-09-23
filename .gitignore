@@ -1,1 +1,4 @@
 .env
+*.log
+*.pyc
+*.cpython-38.pyc
