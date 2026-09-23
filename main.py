@@ -17,8 +17,8 @@ setup_twitchio_logging(level=logging.INFO)
 
 
 ### SETUP ####
-output_file = "project.log"
-file_handler = logging.FileHandler(filename=output_file, encoding='utf-8', mode='w')
+OUTPUT_FILE = "project.log"
+file_handler = logging.FileHandler(filename=OUTPUT_FILE, encoding='utf-8', mode='w')
 file_handler.setLevel(logging.DEBUG)
 file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
 twitchio.utils.setup_logging(level=logging.DEBUG, handler=file_handler)
@@ -41,8 +41,7 @@ async def lifespan(app: FastAPI):
     await asyncio.sleep(1)
     logger.info("Bot started")
 
-    user = bot.create_partialuser(user_id=getenv('STREAMER_ID'), user_login="OneTwoFiveEleven")    
-    #bot_say_hello = asyncio.create_task((user.send_message(sender=bot.user, message="Hello World!"))
+    user = bot.create_partialuser(user_id=getenv('STREAMER_ID'), user_login="OneTwoFiveEleven")
     #await bot_say_hello
     #logger.info("Sent Hello World")
     logger.info("About to Yield to lifespan")
