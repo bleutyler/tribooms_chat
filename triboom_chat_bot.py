@@ -5,15 +5,18 @@ Emphasis on using FastAPI for threaded processing and async calls to TwitchIO
 import asyncio
 import logging
 from os import getenv
+import winsound
+
+
 from dotenv import load_dotenv
 from flask import ctx
 from twitchio.ext import commands
 import twitchio
-import winsound
+
 
 load_dotenv()
 
-class triboom_chat_bot(commands.Bot):
+class triboomChatBot(commands.Bot):
     "The Chat bot that will just watch for messages and make a sound"
     def __init__(self, new_logger: logging.Logger | None = None) -> None:
         self.redirect_uri = getenv('CALLBACK_URL')
@@ -63,7 +66,7 @@ class triboom_chat_bot(commands.Bot):
     async def user_info(self, context: commands.Context):
         "Get simple twitch user details"
         client = twitchio.Client(getenv('CLIENT_ID'),
-                             client_secret=getenv('CLIENT_SECRET'))
+                             client_secret=getenv('CLIENT_SECRET'), logins=[])
         await client.login()
         twitch_users = await client.fetch_users(logins=[context.author.name])
         for user in twitch_users:

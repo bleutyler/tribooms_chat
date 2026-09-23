@@ -29,6 +29,7 @@ Repository = "https://github.com/bleutyler/tribooms_chat.git"
 
 [tool.pylint.'MESSAGES CONTROL']
 disable = [
+    "import-error",
     "no-member",
-    "no-name-in-module",  # Disables E0611 using its name
+    "no-name-in-module",
 ]
