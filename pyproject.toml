@@ -15,6 +15,7 @@ classifiers = [
     "Operating System :: Windows",
 ]
 ignored-modules = ["requests"]
+ignore-files = [ "get_user_and_id_from_twitch.py" ]
 
 # Core dependencies needed to run the application
 dependencies = [
