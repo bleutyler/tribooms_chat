@@ -21,4 +21,4 @@ jobs:
         pip install -r requirements.txt
     - name: Analysing the code with pylint
       run: |
-        pylint --rcfile=tribooms_chat.toml main.py tribooms_chat_bot.py
+        pylint --rcfile=tribooms_chat.toml main.py triboom_chat_bot.py
